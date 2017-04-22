@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forbrukslån</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="">Individuell oppgave Webapplikasjoner</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="">Hjem</a>
+                    </li>
+                    <li>
+                        <a href="">Spare</a>
+                    </li>
+                    <li>
+                        <a href="">Forsikring</a>
+                    </li>
+                    <li>
+                        <a href="">Eiendom</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container" style="padding-top:60px;">
+        <h1>Forbrukslån i Angular 2</h1>
+
+    </div>
+    <div class="container">
+        <div class="col-sm-4" *ngIf="visCalc">
+            <h2>Forbrukslån</h2>
+            <br />
+            <h4>Vurderer du forbrukslån? Du bestemmer selv hva du vil bruke pengene til og når du ønsker å betale ned.</h4>
+            <br />
+            <h3>Prøv vår lånekalkulator</h3>
+            <br/>
+            <div>
+                <label style="font-size:18px;">Ønsket lånebeløp</label>
+                <input id="slider1" type="range" max="500000" min="10000" step="5000" [(ngModel)]="gBelop" (ngModelChange)="utRekning()" />
+                <input type="text" max="500000" min="10000" [(ngModel)]="gBelop" style="width:100px; font-size:20px; margin-top:15px;" (ngModelChange)="utRekning()"/>
+                <input type="text" readonly="readonly" value="kr" style="width:30px; font-size:20px; background-color:#d3d3d3;"/>
+            </div>
+            <br />
+            <div>
+                <label style="font-size:18px;">Nedbetalingstid</label>
+                <input id="slider2" type="range" max="25" min="1" step="1" [(ngModel)]="aar" (ngModelChange)="utRekning()" />
+                <input type="text" min="1" max="1" [(ngModel)]="aar" style="width:100px; font-size:20px; margin-top:15px;" (ngModelChange)="utRekning()"/>
+                <input type="text" readonly="readonly" value="år" style="width:30px; font-size:20px; background-color:#d3d3d3;" />
+            </div>
+            <div>
+                <h3>Du må betale: {{ mBelop }} kr/mnd.</h3>
+            </div>
+            <div>
+                <button style="margin-bottom:50px; background-color:#4484CE;" class='btn btn-primary' (click)='registrerKunde()'>SØK FORBRUKSLÅN NÅ  <span class="glyphicon glyphicon-ok"></span></button>
+            </div>
+            
+        </div>
+        <div class="col-sm-4" *ngIf="visTilbakeMelding">
+             <h4 style="font-size:20px;">{{ tilbakeMelding }}</h4>
+            <button class="btn btn-primary" (click)="tilbakeTilForside()">Tilbake til forsiden</button>
+
+        </div>
+            <div class="col-sm-4" *ngIf="visSkjema">
+                <h3>Søknadsskjema</h3>
+                <form [formGroup]="skjema" (ngSubmit)="vedSubmit()">
+                    <div class="form-group">
+                        <label>Ønsket lånebeløp</label>
+                        <input class="form-control" name="grunnBelop" formControlName="grunnBelop" [(ngModel)]="gBelop" required/>
+                        <p class="alert alert-warning" [hidden]="skjema.controls.grunnBelop.valid || (skjema.controls.grunnBelop.pristine && !submitted)">
+                            Beløp må være gyldig.
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label>Nedbetalingstid</label>
+                        <input class="form-control" name="grunnBelop" formControlName="antallAar" [(ngModel)]="aar" required/>
+                        <p class="alert alert-warning" [hidden]="skjema.controls.antallAar.valid || (skjema.controls.antallAar.pristine && !submitted)">
+                            Antall år må være gyldig.
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label>Personnummer</label>
+                        <input class="form-control" formControlName="personnummer" placeholder="Personnummer" required/>
+                        <p class="alert alert-warning" [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
+                            Personnummer må være 11 siffer.
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label>Epost</label>
+                        <input class="form-control" formControlName="epost" placeholder="Epost" required/>
+                        <p class="alert alert-warning" [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
+                            Epost må være gyldig.
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefonnummer</label>
+                        <input class="form-control" formControlName="telefonnummer" placeholder="Telefonnummer" required/>
+                        <p class="alert alert-warning" [hidden]="skjema.controls.telefonnummer.valid || (skjema.controls.telefonnummer.pristine && !submitted)">
+                            Telefonnummer må være 8 siffer.
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" [disabled]="!skjema.valid" *ngIf="skjemaStatus=='Registrer'" class="btn btn-primary">SØK OM LÅN</button>
+                        <button class="btn btn-warning" (click)="tilbakeTilForside()">Tilbake</button>
+                    </div>
+                </form>
+            </div>
+        <div class="col-sm-4" *ngIf="visValideringMelding">
+            <h4>{{ validering }}</h4>
+        </div>
+</div>
+ </body>
+</html>
